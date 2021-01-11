@@ -1,11 +1,5 @@
 <template>
   <div class="home">
-    <el-button>默认按钮</el-button>
+    <div class="demol">功能测试</div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "Home"
-};
-</script>

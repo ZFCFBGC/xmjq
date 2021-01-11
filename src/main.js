@@ -11,6 +11,7 @@ import Tools from "@/assets/js/tools.js";
 
 /* 初始化CSS, 公共类样式*/
 import "@/assets/css/reset.css";
+import "@/assets/css/reset.less";
 
 import { Button, Table, TableColumn, Pagination } from "element-ui";
 Vue.config.productionTip = false;

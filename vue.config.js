@@ -37,6 +37,13 @@ module.exports = {
     config.entry.app = ["./src/main.js"];
     config.resolve.alias.set("@", resolve("src"));
   },
+  css: {
+		loaderOptions: {
+			less: {
+				javascriptEnabled: true
+			}
+		}
+	},
   pluginOptions: {
     moment: {
       locales: ["zh-cn"], // 时间插件，选择中国时区
@@ -53,3 +60,4 @@ module.exports = {
     ],
   },
 };
+
