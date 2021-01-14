@@ -2,20 +2,14 @@
   <div class="home">
     <div class="demol">功能测试</div>
     <div>
-      <gqg-input
-        v-model="username"
-        placeholder="请输入用户名"
-        @input="getNewVal"
-        width="220px"
-        clearable
-      ></gqg-input>
-    </div>
-    <div>
-      <gqg-radio v-model="gqg" :label="1" @change="getChange">男</gqg-radio>
-      <gqg-radio v-model="gqg" :label="2" @change="getChange">女</gqg-radio>
-    </div>
-    <div v-if="isFileShow">
-      <gqg-pdf :filePath="filePath" @close="getClose"></gqg-pdf>
+      <gqg-form :model="form" :rules="rules">
+        <gqg-form-item label="用户名：" prop="userName">
+          <gqg-input v-model="form.userName"></gqg-input>
+        </gqg-form-item>
+        <gqg-form-item label="密码：" prop="passWord">
+          <gqg-input v-model="form.passWord"></gqg-input>
+        </gqg-form-item>
+      </gqg-form>
     </div>
   </div>
 </template>
@@ -23,44 +17,34 @@
 import gqgInput from "@/components/form/gqg_input.vue";
 import gqgPdf from "@/components/pdfFile/gqg_pdf.vue";
 import gqgRadio from "@/components/form/gqg_radio.vue";
+import gqgCheckbox from "@/components/form/gqg_checkBox.vue";
+import gqgSelect from "@/components/form/gqg_select.vue";
+import gqgForm from "@/components/gqg_form/gqg_form.vue";
+import gqgFormItem from "@/components/gqg_form_item/gqg_form_item.vue";
+
 export default {
   data() {
     return {
-      username: "郭启庚",
-      isFileShow: true,
-      filePath: "",
-      gqg: 2,
-      options: [
-        {
-          label: "gqg",
-          value: 1,
-        },
-        {
-          label: "mwc",
-          value: 2,
-        },
-      ],
+      form: {
+        userName: "",
+        passWord: "",
+      },
+      rules: {
+        userName: [{ required: true, message: "不能为空", trigger: "blur" }],
+        passWord: [{ required: true, message: "不能为空", trigger: "blur" }],
+      },
     };
   },
   components: {
     gqgInput,
     gqgPdf,
     gqgRadio,
+    gqgCheckbox,
+    gqgSelect,
+    gqgForm,
+    gqgFormItem,
   },
-  created() {
-    this.filePath =
-      "../../../pdf/web/viewer.html?file=../../../file/新疆兵团监管平台测试安全报告.pdf";
-  },
-  methods: {
-    getNewVal(val) {
-      console.log("333", val, this.username);
-    },
-    getClose(val) {
-      this.isFileShow = false;
-    },
-    getChange(val) {
-      console.log("单选框", this.gqg);
-    },
-  },
+  created() {},
+  methods: {},
 };
 </script>

@@ -18,6 +18,7 @@
   </div>
 </template>
 <script>
+import emitter from "@/mixins/emitter";
 export default {
   name: "gqgInput",
   props: {
@@ -36,7 +37,7 @@ export default {
     // 是否可清除
     clearable: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     // 默认宽度
     width: {
@@ -54,6 +55,7 @@ export default {
       default: true,
     },
   },
+  mixins: [emitter],
   //model中prop接受v-model传递的值
   model: {
     prop: "val",
@@ -70,8 +72,7 @@ export default {
       this.myValue = newVal;
     },
   },
-  created() {
-  },
+  created() {},
   methods: {
     // 切换 聚焦/失焦
     toggleFocus(value) {
@@ -84,14 +85,15 @@ export default {
     // 失焦回调
     handleBlur(e) {
       this.$emit("blur", e.target.value);
+      debugger;
+      if (this.validateEvent) {
+        this.dispatch("gqgFormItem", "form-blur", e.target.value);
+      }
       this.toggleFocus(false);
     },
     // 聚焦回调
     handleFocus(e) {
       this.$emit("focus", e.target.value);
-      // if (this.validateEvent) {
-      //   this.dispatch("ucong-form-item", "ucong.form.blur", [e.target.value]);
-      // }
       this.toggleFocus(true);
     },
     // 清空
