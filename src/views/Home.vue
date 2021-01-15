@@ -12,16 +12,28 @@
       </gqg-form>
     </div>
     <div>
-      <gqg-radio-group v-model="radio">
+      <gqg-radio-group v-model="radio" @change="getChange">
         <gqg-radio label="boy" name="sex">男</gqg-radio>
         <gqg-radio label="girl" name="sex">女</gqg-radio>
         <gqg-radio label="mimi" name="sex">秘密</gqg-radio>
       </gqg-radio-group>
-       <gqg-radio-group v-model="radio1">
+      <!-- <gqg-radio-group v-model="radio1">
         <gqg-radio label="18" name="age">18</gqg-radio>
         <gqg-radio label="19" name="age">19</gqg-radio>
         <gqg-radio label="20" name="age">20</gqg-radio>
-      </gqg-radio-group>
+      </gqg-radio-group> -->
+    </div>
+    <div>
+      <!-- <gqg-checkbox v-model="checked">备选项</gqg-checkbox> -->
+    </div>
+    <div>
+      <gqg-checkbox-group v-model="checkList" @change="getVal">
+        <gqg-checkbox label="复选框 A"></gqg-checkbox>
+        <gqg-checkbox label="复选框 B"></gqg-checkbox>
+        <gqg-checkbox label="复选框 C"></gqg-checkbox>
+        <gqg-checkbox label="复选框 D"></gqg-checkbox>
+        <gqg-checkbox label="复选框 F"></gqg-checkbox>
+      </gqg-checkbox-group>
     </div>
   </div>
 </template>
@@ -34,6 +46,7 @@ import gqgSelect from "@/components/form/gqg_select.vue";
 import gqgForm from "@/components/gqg_form/gqg_form.vue";
 import gqgFormItem from "@/components/gqg_form_item/gqg_form_item.vue";
 import gqgRadioGroup from "@/components/gqg_radio_group/gqg_radio_group.vue";
+import gqgCheckboxGroup from "@/components/gqg_checkBox_group/gqg_checkBox_group.vue";
 export default {
   data() {
     return {
@@ -49,7 +62,9 @@ export default {
         ],
       },
       radio: "boy",
-      radio1:''
+      radio1: "",
+      checked: true,
+      checkList: ['复选框 A','复选框 C','复选框 D'],
     };
   },
   components: {
@@ -61,15 +76,16 @@ export default {
     gqgForm,
     gqgFormItem,
     gqgRadioGroup,
+    gqgCheckboxGroup
   },
   created() {},
   methods: {
-    getChange(){
-      console.log('2222222')
+    getChange(val) {
+      console.log("2222222", val);
     },
-    getVal(val){
-      console.log('------',val)
-    }
+    getVal(val) {
+      console.log("------", val);
+    },
   },
 };
 </script>

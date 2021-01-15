@@ -1,14 +1,20 @@
 <template>
-  <label class="checkbox">
+  <label
+    class="checkbox"
+    :class="['checkbox', checked && 'checked', disabled && 'disabled']"
+  >
     <input
       type="checkbox"
-      :checked="checked"
+      :name="name"
+      v-model="model"
       @change="handleChange"
       :disabled="disabled"
-      :class="['checkbox', checked && 'checked', disabled && 'disabled']"
     />
     <div class="show-box" />
-    <div class="check-text"><slot /></div>
+    <div class="check-text" v-if="$slots.default || label">
+      <slot />
+      <template v-if="!$slots.default">{{ label }}</template>
+    </div>
   </label>
 </template>
 
@@ -16,6 +22,10 @@
 export default {
   name: "checkbox",
   props: {
+    value: {
+      default: "",
+    },
+    label: {},
     checked: {
       type: Boolean,
       default: false,
@@ -24,10 +34,38 @@ export default {
       type: Boolean,
       default: false,
     },
+    name: {
+      type: String,
+      default: "checkBoxName",
+    },
   },
-  model: {
-    prop: "checked",
-    event: "change",
+  computed: {
+    isGroup() {
+      let parent = this.$parent;
+      while (parent) {
+        console.log('组件名：',parent.$options.componentName)
+        if (parent.$options.componentName !== "checkBoxGroup") {
+          parent = parent.$parent;
+        } else {
+          this._checkboxGroup = parent;
+          return true;
+        }
+      }
+      return false;
+    },
+    model: {
+      get() {
+        console.log("值选择：", this._checkboxGroup);
+        return this.isGroup ? this._checkboxGroup : this.value;
+      },
+      set(val) {
+        if (this.isGroup) {
+          this.dispatch("checkBoxGroup", "input", [val]);
+        } else {
+          this.$emit("input", val);
+        }
+      },
+    },
   },
   methods: {
     handleChange(e) {
@@ -52,6 +90,16 @@ export default {
   }
   input:checked + .show-box {
     background: #67b83c;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    .show-box {
+      background-color: #edf2fc;
+      border-color: #dcdfe6;
+    }
+    .check-text {
+      color: #c0c4cc;
+    }
   }
   .show-box {
     position: relative;
@@ -80,6 +128,8 @@ export default {
     vertical-align: text-top;
     margin-left: 4px;
     line-height: 18px;
+    font-size: 14px;
+    color: #606266;
   }
 }
 </style>
