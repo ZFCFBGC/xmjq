@@ -32,7 +32,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "请输入...",
+      default: "请输入",
     },
     // 是否可清除
     clearable: {
@@ -42,7 +42,7 @@ export default {
     // 默认宽度
     width: {
       type: String,
-      default: "220px",
+      default: "180px",
     },
     // 原始输入框类型
     type: {
@@ -85,7 +85,6 @@ export default {
     // 失焦回调
     handleBlur(e) {
       this.$emit("blur", e.target.value);
-      debugger;
       if (this.validateEvent) {
         this.dispatch("gqgFormItem", "form-blur", e.target.value);
       }
@@ -110,7 +109,7 @@ export default {
   justify-content: flex-start;
   align-items: center;
   height: 32px;
-  border-radius: 2px;
+  border-radius: 4px;
   border: 1px solid #eaedea;
   background: #fff;
   transition: border-color 0.4s;

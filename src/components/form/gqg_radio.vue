@@ -1,23 +1,28 @@
 <template>
   <div class="radio">
     <input
+      ref="radio"
       :id="label"
       :disabled="disabled"
       @change="handleChange"
-      name="radio"
+      :name="name"
       type="radio"
-      :checked="checked"
+      v-model="model"
       :value="label"
-      @click="checkRadio($event)"
     />
     <label :for="label" class="radio-label"><slot></slot></label>
   </div>
 </template>
 
 <script>
+import emitter from "@/mixins/emitter";
 export default {
   name: "radio",
+  mixins: [emitter],
   props: {
+    value: {
+      default: "",
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -32,43 +37,41 @@ export default {
     radio: {
       default: "",
     },
-    toggleRadio: {
-      type: Boolean,
-      default: false,
-    },
   },
-  model: {
-    prop: "radio",
-    event: "change",
-  },
-  watch: {
-    radio(newVal) {
-      if (newVal == this.label) {
-        this.checked = true;
+  computed: {
+    isGroup() {
+      let parent = this.$parent;
+      while (parent) {
+        if (parent.$options.componentName !== "RadioGroup") {
+          parent = parent.$parent;
+        } else {
+          this._radioGroup = parent;
+          return true;
+        }
       }
+      return false;
     },
-  },
-  data() {
-    return {
-      checked: false,
-    };
-  },
-  created() {
-    if (this.radio == this.label) {
-      this.checked = true;
-    }
+    model: {
+      get() {
+        return this.isGroup ? this._radioGroup.value : this.value;
+      },
+      set(val) {
+        if (this.isGroup) {
+          this.dispatch("RadioGroup", "input", [val]);
+        } else {
+          this.$emit("input", val);
+        }
+        this.$refs.radio &&
+          (this.$refs.radio.checked = this.model === this.label);
+      },
+    },
   },
   methods: {
-    checkRadio($event) {
-      console.log("$event", $event);
-      if (this.toggleRadio) {
-        
-      } else {
-        return;
-      }
-    },
-    handleChange(e) {
-      this.$emit("change", e.target.value);
+    handleChange() {
+      this.$nextTick(() => {
+        this.$emit("change", this.model);
+        this.isGroup && this.dispatch("RadioGroup", "handleChange", this.model);
+      });
     },
   },
 };

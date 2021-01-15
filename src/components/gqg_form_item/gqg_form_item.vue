@@ -1,14 +1,36 @@
 <template>
-  <div class="gqg_form_item">
-    <label class="gqg_form_item_label">{{ label }}</label>
+  <div
+    class="gqg_form_item"
+    :class="[
+      {
+        'is-error': validateState === 'error',
+        'is-required': isRequired,
+      },
+    ]"
+  >
+    <label class="gqg_form_item_label" :style="'width:' + labelWidth">{{
+      label
+    }}</label>
     <div class="gqg_form_item_content">
       <slot></slot>
+      <transition name="gqg_zoom_in_top">
+        <slot
+          v-if="validateState === 'error'"
+          name="error"
+          :error="validateMessage"
+        >
+          <div class="gqg_form_item__error">
+            {{ validateMessage }}
+          </div>
+        </slot>
+      </transition>
     </div>
   </div>
 </template>
 <script>
 import AsyncValidator from "async-validator";
 import emitter from "@/mixins/emitter";
+import { getPropByPath } from "./utils";
 export default {
   name: "gqgFormItem",
   //获取祖先组件注入的依赖
@@ -16,19 +38,49 @@ export default {
   props: {
     label: { type: String, default: "" },
     prop: { type: String },
+    labelWidth: { type: String, default: "80px" },
   },
   mixins: [emitter],
-
+  watch: {
+    error: {
+      immediate: true,
+      handler(value) {
+        this.validateMessage = value;
+        this.validateState = value ? "error" : "";
+      },
+    },
+    validateStatus(value) {
+      this.validateState = value;
+    },
+  },
   data() {
     return {
-      isRequired: false,
-      isShowMes: false,
-      message: "",
+      validateState: false,
+      validateMessage: "",
     };
   },
   computed: {
     fieldValue() {
       return this.form.model[this.prop];
+    },
+    isRequired: {
+      get() {
+        let rules = this.form.rules;
+        const prop = getPropByPath(rules, this.prop || "");
+        rules = rules ? prop.o[this.prop || ""] || prop.v : [];
+        let isRequired = false;
+        if (rules && rules.length) {
+          rules.every((rule) => {
+            if (rule.required) {
+              isRequired = true;
+              return false;
+            }
+            return true;
+          });
+        }
+        return isRequired;
+      },
+      set() {},
     },
   },
   mounted() {
@@ -43,7 +95,6 @@ export default {
   },
   methods: {
     setRules() {
-      console.log("进来了吗");
       let rules = this.getRules();
       if (rules.length) {
         rules.forEach((rule) => {
@@ -77,17 +128,16 @@ export default {
       const validator = new AsyncValidator({ [this.prop]: rules });
       let model = { [this.prop]: this.fieldValue };
       validator.validate(model, { firstFields: true }, (errors) => {
-        this.isShowMes = errors ? true : false;
-        this.message = errors ? errors[0].message : "";
-        if (cb) cb(this.message);
+        this.validateState = !errors ? "success" : "error";
+        this.validateMessage = errors ? errors[0].message : "";
+        if (cb) cb(this.validateMessage);
       });
     },
     resetField() {
-      this.message = "";
+      this.validateMessage = "";
       this.form.model[this.prop] = this.initialValue;
     },
     onFieldBlur() {
-      debugger;
       this.validate("blur");
     },
     onFieldChange() {
@@ -97,21 +147,43 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.is-error {
+  ::v-deep .gqg_input,
+  .textarea-entity {
+    border: 1px solid #f56c6c;
+  }
+}
 .gqg_form_item {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 22px;
+  &.is-required .gqg_form_item_label:before {
+    content: "*";
+    color: red;
+    margin-right: 4px;
+  }
   .gqg_form_item_label {
     text-align: right;
     vertical-align: middle;
     font-size: 14px;
     color: #606266;
-    line-height: 40px;
+    line-height: 34px;
     padding: 0 12px 0 0;
     box-sizing: border-box;
   }
   .gqg_form_item_content {
+    line-height: 34px;
+    position: relative;
     font-size: 14px;
+    .gqg_form_item__error {
+      color: #f56c6c;
+      font-size: 12px;
+      line-height: 1;
+      padding-top: 4px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
   }
 }
 </style>

@@ -59,12 +59,12 @@ export default {
     // 默认宽度
     width: {
       type: String,
-      default: "190px",
+      default: "180px",
     },
     // 提示占位符
     placeholder: {
       type: String,
-      default: "请选择...",
+      default: "请选择",
     },
     // 最多可以展示的列表项
     maxItemAccount: {
