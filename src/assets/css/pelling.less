@@ -1,0 +1,65 @@
+// 默认主题色（）
+@baseColor: var(--baseColor, #4f94fa);
+@activeColor: var(--activeColor, #4f94fa);
+@fontColor: var(--fontColor, #4f94fa);
+// 主题色定义
+@primary: var(--primary,#67b83c);
+@info: var(--info, #2082ED;);
+@success: var(--success, #64D274);
+@warning: var(--warning, #FDAD4D);
+@error: var(--error, #FE5353);
+@affirm: var(--affirm, #DD1818);
+
+// 文本颜色定义
+@title: var(--title, #3D3F3D);
+@content: var(--content, #6C6F6C);
+@normal: var(--normal, #999C99);
+@tips: var(--tips, #C7CBC7);
+@title-border:var(--title-border, #E7E7E7);
+@title-bg:var(--title-bg, #f7f7f7);
+// 辅助类颜色定义
+@divider: var(--divider, #EAEDEA);
+@white: var(--white, #fff);
+@bg-white: var(--bg-white, #F8F8F8);
+@line: var(--line, #FF5F58);
+@order-active:var(--order-active, #2082ED);
+// 禁用框颜色定义
+@not-allowed: var(--not-allowed, #fafafa);
+@ic-bc: var(--ic-bc, #cc0621);
+// 全局通用样式类
+.main {
+	width: 1136px;
+	margin: 0 auto;
+}
+
+// 水平 flex 布局 居中 居中
+.display-flex-row-c-c {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+// 水平 flex 布局 居中 起始
+.display-flex-row-c-s {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+// 水平 flex 布局 起始 起始
+.display-flex-row-s-s {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+
+// 垂直 flex 布局 起始
+.display-flex-column-s-s {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+}

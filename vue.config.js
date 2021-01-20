@@ -36,17 +36,25 @@ module.exports = {
   chainWebpack: (config) => {
     config.entry.app = ["./src/main.js"];
     config.resolve.alias.set("@", resolve("src"));
+    // less 全局样式注入
   },
   css: {
-		loaderOptions: {
-			less: {
-				javascriptEnabled: true
-			}
-		}
-	},
+    loaderOptions: {
+      less: {
+        javascriptEnabled: true,
+      },
+    },
+  },
   pluginOptions: {
     moment: {
       locales: ["zh-cn"], // 时间插件，选择中国时区
+    },
+    "style-resources-loader": {
+      preProcessor: "less",
+      patterns: [
+        // 全局变量路径，不能使用路径别名
+        path.resolve(__dirname, "./src/assets/css/pelling.less"),
+      ],
     },
   },
   configureWebpack: {
@@ -60,4 +68,14 @@ module.exports = {
     ],
   },
 };
-
+function addStyleResource(rule) {
+  rule
+    .use("style-resource")
+    .loader("style-resources-loader")
+    .options({
+      preProcessor: "less",
+      patterns: [
+        path.resolve(__dirname, "src/style/global.less"), // 需要全局导入的less
+      ],
+    });
+}

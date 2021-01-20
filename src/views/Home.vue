@@ -1,91 +1,51 @@
 <template>
-  <div class="home">
-    <div class="demol">功能测试</div>
-    <div>
-      <gqg-form :model="form" :rules="rules">
-        <gqg-form-item label="用户名：" prop="userName">
-          <gqg-input v-model="form.userName"></gqg-input>
-        </gqg-form-item>
-        <gqg-form-item label="邮箱：" prop="email">
-          <gqg-input v-model="form.email"></gqg-input>
-        </gqg-form-item>
-      </gqg-form>
-    </div>
-    <div>
-      <gqg-radio-group v-model="radio" @change="getChange">
-        <gqg-radio label="boy" name="sex">男</gqg-radio>
-        <gqg-radio label="girl" name="sex">女</gqg-radio>
-        <gqg-radio label="mimi" name="sex">秘密</gqg-radio>
-      </gqg-radio-group>
-      <!-- <gqg-radio-group v-model="radio1">
-        <gqg-radio label="18" name="age">18</gqg-radio>
-        <gqg-radio label="19" name="age">19</gqg-radio>
-        <gqg-radio label="20" name="age">20</gqg-radio>
-      </gqg-radio-group> -->
-    </div>
-    <div>
-      <!-- <gqg-checkbox v-model="checked">备选项</gqg-checkbox> -->
-    </div>
-    <div>
-      <gqg-checkbox-group v-model="checkList" @change="getVal">
-        <gqg-checkbox label="复选框 A"></gqg-checkbox>
-        <gqg-checkbox label="复选框 B"></gqg-checkbox>
-        <gqg-checkbox label="复选框 C"></gqg-checkbox>
-        <gqg-checkbox label="复选框 D"></gqg-checkbox>
-        <gqg-checkbox label="复选框 F"></gqg-checkbox>
-      </gqg-checkbox-group>
+  <div class="gqg_home">
+    <div class="header">
+      <div class="gqg_title">组件自定义封装</div>
+      <div class="header_r">
+        换肤
+        <gqg-theme></gqg-theme>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import gqgInput from "@/components/form/gqg_input.vue";
-import gqgPdf from "@/components/pdfFile/gqg_pdf.vue";
-import gqgRadio from "@/components/form/gqg_radio.vue";
-import gqgCheckbox from "@/components/form/gqg_checkBox.vue";
-import gqgSelect from "@/components/form/gqg_select.vue";
-import gqgForm from "@/components/gqg_form/gqg_form.vue";
-import gqgFormItem from "@/components/gqg_form_item/gqg_form_item.vue";
-import gqgRadioGroup from "@/components/gqg_radio_group/gqg_radio_group.vue";
-import gqgCheckboxGroup from "@/components/gqg_checkBox_group/gqg_checkBox_group.vue";
+import gqgTheme from "@/components/gqg_theme/gqg_theme.vue";
 export default {
   data() {
     return {
-      form: {
-        userName: "",
-        email: "",
-      },
-      rules: {
-        userName: [{ required: true, message: "不能为空", trigger: "blur" }],
-        email: [
-          { required: true, message: "不能为空", trigger: "blur" },
-          { type: "email", message: "邮箱格式不正确", trigger: "blur" },
-        ],
-      },
-      radio: "boy",
-      radio1: "",
-      checked: true,
-      checkList: ['复选框 A','复选框 C','复选框 D'],
+      isTheme: true,
     };
   },
   components: {
-    gqgInput,
-    gqgPdf,
-    gqgRadio,
-    gqgCheckbox,
-    gqgSelect,
-    gqgForm,
-    gqgFormItem,
-    gqgRadioGroup,
-    gqgCheckboxGroup
+    gqgTheme,
   },
-  created() {},
-  methods: {
-    getChange(val) {
-      console.log("2222222", val);
-    },
-    getVal(val) {
-      console.log("------", val);
-    },
-  },
+  methods: {},
 };
 </script>
+<style lang="less" scoped>
+.gqg_home {
+  .header {
+    height: 54px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0 16px;
+    background: @bg-white;
+    .gqg_title {
+      line-height: 54px;
+      color: @primary;
+      font-size: 16px;
+    }
+    .header_r {
+      position: relative;
+      width: 100px;
+      line-height: 54px;
+      color: @primary;
+      font-size: 16px;
+      text-align: center;
+    }
+  }
+}
+</style>
