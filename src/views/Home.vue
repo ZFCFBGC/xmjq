@@ -7,18 +7,26 @@
         <gqg-theme></gqg-theme>
       </div>
     </div>
+    <div>
+      <drag-popup title="可拖拽弹窗">
+        <div style="height:800px;background:#f40;"></div>
+      </drag-popup>
+    </div>
   </div>
 </template>
 <script>
 import gqgTheme from "@/components/gqg_theme/gqg_theme.vue";
+import dragPopup from "@/components/drag_popup/drag_popup.vue";
 export default {
   data() {
     return {
       isTheme: true,
+      isDragShow: true,
     };
   },
   components: {
     gqgTheme,
+    dragPopup,
   },
   methods: {},
 };

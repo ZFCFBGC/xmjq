@@ -3,6 +3,10 @@ import App from "./App.vue";
 import router from "./router";
 import '@/assets/css/reset.css';
 import '@/assets/css/pelling.less';
+
+// 拖拽函数
+import drag from "@/assets/js/drag.js";
+
 import { Button, Table, TableColumn, Pagination } from "element-ui";
 Vue.config.productionTip = false;
 Vue.use(Button);
