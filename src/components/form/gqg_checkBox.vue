@@ -1,50 +1,133 @@
 <template>
   <label
-    class="checkbox"
-    :class="['checkbox', checked && 'checked', disabled && 'disabled']"
+    class="el-checkbox"
+    :class="[
+      border && checkboxSize ? 'el-checkbox--' + checkboxSize : '',
+      { 'is-disabled': isDisabled },
+      { 'is-bordered': border },
+      { 'is-checked': isChecked },
+    ]"
+    :id="id"
   >
-    <input
-      type="checkbox"
-      :name="name"
-      v-model="model"
-      @change="handleChange"
-      :disabled="disabled"
-    />
-    <div class="show-box" />
-    <div class="check-text" v-if="$slots.default || label">
-      <slot />
+    <span
+      class="el-checkbox__input"
+      :class="{
+        'is-disabled': isDisabled,
+        'is-checked': isChecked,
+        'is-indeterminate': indeterminate,
+        'is-focus': focus,
+      }"
+      :tabindex="indeterminate ? 0 : false"
+      :role="indeterminate ? 'checkbox' : false"
+      :aria-checked="indeterminate ? 'mixed' : false"
+    >
+      <span class="el-checkbox__inner"></span>
+      <!-- true-value  false-value v-model三者对应关系，是封装多选框组得关键-->
+      <input
+        v-if="trueLabel || falseLabel"
+        class="el-checkbox__original"
+        type="checkbox"
+        :aria-hidden="indeterminate ? 'true' : 'false'"
+        :name="name"
+        :disabled="isDisabled"
+        :true-value="trueLabel"
+        :false-value="falseLabel"
+        v-model="model"
+        @change="handleChange"
+        @focus="focus = true"
+        @blur="focus = false"
+      />
+      <input
+        v-else
+        class="el-checkbox__original"
+        type="checkbox"
+        :aria-hidden="indeterminate ? 'true' : 'false'"
+        :disabled="isDisabled"
+        :value="label"
+        :name="name"
+        v-model="model"
+        @change="handleChange"
+        @focus="focus = true"
+        @blur="focus = false"
+      />
+    </span>
+    <span class="el-checkbox__label" v-if="$slots.default || label">
+      <slot></slot>
       <template v-if="!$slots.default">{{ label }}</template>
-    </div>
+    </span>
   </label>
 </template>
-
 <script>
+import emitter from "@/mixins/emitter";
+
 export default {
-  name: "checkbox",
-  props: {
-    value: {
+  name: "checkBox",
+
+  mixins: [emitter],
+
+  inject: {
+    elForm: {
       default: "",
     },
-    label: {},
-    checked: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    name: {
-      type: String,
-      default: "checkBoxName",
+    elFormItem: {
+      default: "",
     },
   },
+
+  componentName: "CheckBox",
+
+  data() {
+    return {
+      selfModel: false,
+      focus: false,
+      isLimitExceeded: false,
+    };
+  },
+
   computed: {
+    model: {
+      get() {
+        return this.isGroup
+          ? this.store
+          : this.value !== undefined
+          ? this.value
+          : this.selfModel;
+      },
+
+      set(val) {
+        if (this.isGroup) {
+          this.isLimitExceeded = false;
+          this._checkboxGroup.min !== undefined &&
+            val.length < this._checkboxGroup.min &&
+            (this.isLimitExceeded = true);
+
+          this._checkboxGroup.max !== undefined &&
+            val.length > this._checkboxGroup.max &&
+            (this.isLimitExceeded = true);
+
+          this.isLimitExceeded === false &&
+            this.dispatch("checkboxGroup", "input", [val]);
+        } else {
+          this.$emit("input", val);
+          this.selfModel = val;
+        }
+      },
+    },
+
+    isChecked() {
+      if ({}.toString.call(this.model) === "[object Boolean]") {
+        return this.model;
+      } else if (Array.isArray(this.model)) {
+        return this.model.indexOf(this.label) > -1;
+      } else if (this.model !== null && this.model !== undefined) {
+        return this.model === this.trueLabel;
+      }
+    },
+
     isGroup() {
       let parent = this.$parent;
       while (parent) {
-        console.log('组件名：',parent.$options.componentName)
-        if (parent.$options.componentName !== "checkBoxGroup") {
+        if (parent.$options.componentName !== "checkboxGroup") {
           parent = parent.$parent;
         } else {
           this._checkboxGroup = parent;
@@ -53,83 +136,96 @@ export default {
       }
       return false;
     },
-    model: {
-      get() {
-        console.log("值选择：", this._checkboxGroup);
-        return this.isGroup ? this._checkboxGroup : this.value;
-      },
-      set(val) {
-        if (this.isGroup) {
-          this.dispatch("checkBoxGroup", "input", [val]);
-        } else {
-          this.$emit("input", val);
-        }
-      },
+
+    store() {
+      return this._checkboxGroup ? this._checkboxGroup.value : this.value;
+    },
+
+    /* used to make the isDisabled judgment under max/min props */
+    isLimitDisabled() {
+      const { max, min } = this._checkboxGroup;
+      return (
+        (!!(max || min) && this.model.length >= max && !this.isChecked) ||
+        (this.model.length <= min && this.isChecked)
+      );
+    },
+
+    isDisabled() {
+      return this.isGroup
+        ? this._checkboxGroup.disabled ||
+            this.disabled ||
+            (this.elForm || {}).disabled ||
+            this.isLimitDisabled
+        : this.disabled || (this.elForm || {}).disabled;
+    },
+
+    _elFormItemSize() {
+      return (this.elFormItem || {}).elFormItemSize;
+    },
+
+    checkboxSize() {
+      const temCheckboxSize =
+        this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
+      return this.isGroup
+        ? this._checkboxGroup.checkboxGroupSize || temCheckboxSize
+        : temCheckboxSize;
     },
   },
+
+  props: {
+    value: {},
+    label: {},
+    indeterminate: Boolean,
+    disabled: Boolean,
+    checked: Boolean,
+    name: String,
+    trueLabel: [String, Number],
+    falseLabel: [String, Number],
+    id: String /* 当indeterminate为真时，为controls提供相关连的checkbox的id，表明元素间的控制关系*/,
+    controls: String /* 当indeterminate为真时，为controls提供相关连的checkbox的id，表明元素间的控制关系*/,
+    border: Boolean,
+    size: String,
+  },
+
   methods: {
-    handleChange(e) {
-      this.$emit("change", e.target.checked);
+    addToStore() {
+      if (Array.isArray(this.model) && this.model.indexOf(this.label) === -1) {
+        this.model.push(this.label);
+      } else {
+        this.model = this.trueLabel || true;
+      }
+    },
+    handleChange(ev) {
+      if (this.isLimitExceeded) return;
+      let value;
+      if (ev.target.checked) {
+        value = this.trueLabel === undefined ? true : this.trueLabel;
+      } else {
+        value = this.falseLabel === undefined ? false : this.falseLabel;
+      }
+      this.$emit("change", value, ev);
+      this.$nextTick(() => {
+        if (this.isGroup) {
+          this.dispatch("checkboxGroup", "change", [this._checkboxGroup.value]);
+        }
+      });
+    },
+  },
+
+  created() {
+    this.checked && this.addToStore();
+  },
+  mounted() {
+    // 为indeterminate元素 添加aria-controls 属性
+    if (this.indeterminate) {
+      this.$el.setAttribute("aria-controls", this.controls);
+    }
+  },
+
+  watch: {
+    value(value) {
+      this.dispatch("gqgFormItem", "form.change", value);
     },
   },
 };
 </script>
-
-<style lang="less" scoped>
-.checkbox {
-  position: relative;
-  user-select: none;
-  height: 18px;
-  margin-right: 4px;
-  overflow: hidden;
-  cursor: pointer;
-  input {
-    cursor: pointer;
-    width: 0;
-    height: 0;
-  }
-  input:checked + .show-box {
-    background: #67b83c;
-  }
-  &.disabled {
-    cursor: not-allowed;
-    .show-box {
-      background-color: #edf2fc;
-      border-color: #dcdfe6;
-    }
-    .check-text {
-      color: #c0c4cc;
-    }
-  }
-  .show-box {
-    position: relative;
-    vertical-align: text-top;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border-radius: 2px;
-    border: 1px solid #d8d8d8;
-    background: #fff;
-
-    &:before {
-      content: "";
-      position: absolute;
-      top: 2px;
-      left: 6px;
-      width: 3px;
-      height: 8px;
-      border: solid #fff;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
-    }
-  }
-  .check-text {
-    display: inline-block;
-    vertical-align: text-top;
-    margin-left: 4px;
-    line-height: 18px;
-    font-size: 14px;
-    color: #606266;
-  }
-}
-</style>

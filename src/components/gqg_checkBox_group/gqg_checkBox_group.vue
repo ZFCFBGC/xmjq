@@ -1,19 +1,48 @@
+<script>
+import emitter from "@/mixins/emitter";
+
+export default {
+  name: "checkboxGroup",
+
+  componentName: "checkboxGroup",
+
+  mixins: [emitter],
+
+  inject: {
+    elFormItem: {
+      default: "",
+    },
+  },
+
+  props: {
+    value: {},
+    disabled: Boolean,
+    min: Number,
+    max: Number,
+    size: String,
+    fill: String,
+    textColor: String,
+  },
+
+  computed: {
+    _elFormItemSize() {
+      return (this.elFormItem || {}).elFormItemSize;
+    },
+    checkboxGroupSize() {
+      return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
+    },
+  },
+
+  watch: {
+    value(value) {
+      this.dispatch("gqgFormItem", "form.change", [value]);
+    },
+  },
+};
+</script>
+
 <template>
-  <div class="gqg_checkbox_group">
+  <div class="el-checkbox-group" role="group" aria-label="checkbox-group">
     <slot></slot>
   </div>
 </template>
-<script>
-export default {
-  name: "checkBoxGroup",
-  componentName: "checkBoxGroup",
-  props: {
-    value: {
-      type: Array,
-      default: [],
-    },
-  },
-  mounted() {},
-  methods: {},
-};
-</script>

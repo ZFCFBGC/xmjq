@@ -9,22 +9,21 @@
         <gqg-form-item label="邮箱：" prop="email">
           <gqg-input v-model="form.email"></gqg-input>
         </gqg-form-item>
+        <gqg-form-item label="性别：" prop="sex">
+          <gqg-radio-group v-model="form.sex">
+            <gqg-radio label="boy" name="sex">男</gqg-radio>
+            <gqg-radio label="girl" name="sex">女</gqg-radio>
+            <gqg-radio label="mimi" name="sex">秘密</gqg-radio>
+          </gqg-radio-group>
+        </gqg-form-item>
       </gqg-form>
     </div>
     <div>
-      <gqg-radio-group v-model="radio" @change="getChange">
-        <gqg-radio label="boy" name="sex">男</gqg-radio>
-        <gqg-radio label="girl" name="sex">女</gqg-radio>
-        <gqg-radio label="mimi" name="sex">秘密</gqg-radio>
-      </gqg-radio-group>
-      <!-- <gqg-radio-group v-model="radio1">
-        <gqg-radio label="18" name="age">18</gqg-radio>
-        <gqg-radio label="19" name="age">19</gqg-radio>
-        <gqg-radio label="20" name="age">20</gqg-radio>
-      </gqg-radio-group> -->
-    </div>
-    <div>
-      <!-- <gqg-checkbox v-model="checked">备选项</gqg-checkbox> -->
+      <gqg-checkbox
+        label="复选框DDD"
+        v-model="checked"
+        @change="getChange"
+      ></gqg-checkbox>
     </div>
     <div>
       <gqg-checkbox-group v-model="checkList" @change="getVal">
@@ -34,6 +33,14 @@
         <gqg-checkbox label="复选框 D"></gqg-checkbox>
         <gqg-checkbox label="复选框 F"></gqg-checkbox>
       </gqg-checkbox-group>
+    </div>
+    <div>
+      <input
+        type="checkbox"
+        v-model="toggle"
+        :true-value="a"
+        :false-value="b"
+      />
     </div>
   </div>
 </template>
@@ -53,6 +60,7 @@ export default {
       form: {
         userName: "",
         email: "",
+        sex: "",
       },
       rules: {
         userName: [{ required: true, message: "不能为空", trigger: "blur" }],
@@ -60,11 +68,24 @@ export default {
           { required: true, message: "不能为空", trigger: "blur" },
           { type: "email", message: "邮箱格式不正确", trigger: "blur" },
         ],
+        sex: [
+          {
+            required: true,
+            message: "不能为空",
+            trigger: "change",
+          },
+        ],
       },
       radio: "boy",
       radio1: "",
       checked: true,
-      checkList: ['复选框 A','复选框 C','复选框 D'],
+      checkList: ["复选框 A", "复选框 C", "复选框 D"],
+      classA: "s1",
+      classB: "s2",
+      a: "a",
+      b: "b",
+      toggle: 'a',
+      activeColor: "#f0f",
     };
   },
   components: {
@@ -76,7 +97,7 @@ export default {
     gqgForm,
     gqgFormItem,
     gqgRadioGroup,
-    gqgCheckboxGroup
+    gqgCheckboxGroup,
   },
   created() {},
   methods: {
