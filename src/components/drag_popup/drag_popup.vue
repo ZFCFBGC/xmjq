@@ -1,5 +1,5 @@
 <template>
-  <div class="dragPop" v-drag v-if="isDragShow">
+  <div class="dragPop" v-if="isDragShow">
     <div class="dragHeader">
       <div class="dragTitle">{{ title }}</div>
       <div class="dragClose" @click="dragClose">×</div>

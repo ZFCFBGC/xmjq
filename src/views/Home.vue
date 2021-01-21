@@ -8,7 +8,7 @@
       </div>
     </div>
     <div>
-      <drag-popup title="可拖拽弹窗">
+      <drag-popup title="可拖拽弹窗"  v-drag>
         <div style="height:800px;background:#f40;"></div>
       </drag-popup>
     </div>
