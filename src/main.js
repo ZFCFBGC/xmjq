@@ -13,13 +13,12 @@ import Tools from "@/assets/js/tools.js";
 import "@/assets/css/reset.css";
 import "@/assets/css/reset.less";
 
-import { Button, Table, TableColumn, Pagination } from "element-ui";
-Vue.config.productionTip = false;
-Vue.use(Button);
-Vue.use(Table);
-Vue.use(TableColumn);
-Vue.use(Pagination);
-
+import gqgButton from "@/components/button/index.js";
+import gqgSwitch from "@/components/switch/index.js";
+import gqgSlider from "@/components/slider/index.js";
+Vue.use(gqgButton);
+Vue.use(gqgSwitch);
+Vue.use(gqgSlider);
 new Vue({
   router,
   render: (h) => h(App),
