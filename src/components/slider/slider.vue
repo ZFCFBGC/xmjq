@@ -1,10 +1,13 @@
 <template>
   <div class="gqgSlider" ref="gqgSlider">
     <div class="gqg_slider_runway">
-      <div class="gqg_slider_bar"></div>
-      <div class="gqg_slider_button_wrapper">
-        <div class="gqg_slider_button"></div>
-      </div>
+      <div
+        class="gqg_slider_button"
+        ref="button"
+        @mouseenter="handleMouseEnter"
+        @mouseleave="handleMouseLeave"
+        @mousedown="onButtonDown"
+      ></div>
     </div>
   </div>
 </template>
@@ -13,66 +16,91 @@ export default {
   name: "gqgSlider",
   data() {
     return {
+      hovering: false,
+      dragging: false,
+      isClick: false,
       startX: 0,
       currentX: 0,
       startY: 0,
       currentY: 0,
+      startPosition: 0,
+      newPosition: null,
     };
   },
-  mounted() {
-    let that = this;
-    let gqgSlider = this.$refs.gqgSlider;
-    gqgSlider.addEventListener("touchmove", (e) => {
-      //屏幕滑动事件
-      let pageX = e.touches[0].pageX - mySliderX; //获取滑动x坐标
-      myWidth = (pageX / mySlider.offsetWidth) * 100; //计算百分比
-      if (myWidth > 100) {
-        //判断不超出范围
-        myWidth = 100;
-      } else if (myWidth < 0) {
-        myWidth = 0;
-      }
-
-      if (this.myPosition.isBtn == 1) {
-        //判断焦点
-        this.myPosition.left = myWidth;
-        rightBtn.style.left = myWidth + "%";
-      } else if (this.myPosition.isBtn == 2) {
-        this.myPosition.right = myWidth;
-        leftBtn.style.left = myWidth + "%";
-      }
-      e.preventDefault();
-    });
-    gqgSlider.addEventListener("touchstart", (e) => {
-      //屏幕触摸事件
-      let touchX = e.touches[0].pageX - mySliderX;
-      let btnWidth = (leftBtn.offsetWidth / mySlider.offsetWidth / 2) * 100; //计算按钮宽度
-      this.myPosition.now = (touchX / mySlider.offsetWidth) * 100;
-      mySliderX = elementLeft(mySlider); //滑动块x坐标
-      if (
-        this.myPosition.now <= this.myPosition.left + btnWidth &&
-        this.myPosition.now >= this.myPosition.left - btnWidth
-      ) {
-        //计算区间 获取焦点
-        this.myPosition.isBtn = 1;
-      } else if (
-        this.myPosition.now <= this.myPosition.right + btnWidth &&
-        this.myPosition.now >= this.myPosition.right - btnWidth
-      ) {
-        this.myPosition.isBtn = 2;
-      } else {
-        this.myPosition.isBtn = 0;
-      }
-    });
+  computed: {
+    currentPosition() {
+      return `${((this.value - this.min) / (this.max - this.min)) * 100}%`;
+    },
   },
-  methods: {},
+  methods: {
+    handleMouseEnter(event) {
+      this.hovering = true;
+    },
+    handleMouseLeave(event) {
+      this.hovering = false;
+    },
+    onButtonDown(event) {
+      event.preventDefault();
+      this.onDragStart(event);
+      window.addEventListener("mousemove", this.onDragging);
+      window.addEventListener("mouseup", this.onDragEnd);
+    },
+    onDragStart(event) {
+      console.log("触发了几次");
+      this.dragging = true;
+      this.isClick = true;
+      this.startX = event.clientX;
+      // this.startPosition = parseFloat(this.currentPosition);
+      this.newPosition = this.startPosition;
+    },
+    onDragging(event) {
+      if (this.dragging) {
+        this.isClick = false;
+        let diff = 0;
+        this.currentX = event.clientX;
+        diff = this.currentX - this.startX;
+        this.newPosition = this.startPosition + diff;
+        console.log("数据：", this.newPosition, this.startPosition, diff);
+        this.setPosition(this.newPosition);
+      }
+    },
+    onDragEnd() {
+      if (this.dragging) {
+        /*
+         * 防止在 mouseup 后立即触发 click，导致滑块有几率产生一小段位移
+         * 不使用 preventDefault 是因为 mouseup 和 click 没有注册在同一个 DOM 上
+         */
+        setTimeout(() => {
+          this.dragging = false;
+
+          if (!this.isClick) {
+            this.setPosition(this.newPosition);
+          }
+        }, 0);
+        window.removeEventListener("mousemove", this.onDragging);
+
+        window.removeEventListener("mouseup", this.onDragEnd);
+      }
+    },
+    setPosition(newPosition) {
+      if (newPosition === null || isNaN(newPosition)) return;
+      // if (newPosition < 0) {
+      //   newPosition = 0;
+      // } else if (newPosition > 100) {
+      //   newPosition = 100;
+      // }
+      console.log(this.$refs);
+      this.$refs.button.style.left = newPosition + "px";
+      console.log("最终结果：", newPosition);
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
 .gqgSlider {
-  width: 100%;
+  position: relative;
   .gqg_slider_runway {
-    width: 100%;
+    width: 300px;
     height: 6px;
     margin: 16px 0;
     background-color: #e4e7ed;
@@ -80,37 +108,19 @@ export default {
     position: relative;
     cursor: pointer;
     vertical-align: middle;
-    .gqg_slider_bar {
-      height: 6px;
-      background-color: #409eff;
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
-      position: absolute;
-      width: 100%;
-      left: 0%;
-    }
-    .gqg_slider_button_wrapper {
-      height: 36px;
-      width: 36px;
-      position: absolute;
-      z-index: 1001;
-      top: -8px;
-      transform: translateX(-50%);
-      background-color: transparent;
-      text-align: center;
-      user-select: none;
-      line-height: normal;
-      left: 100%;
-      .gqg_slider_button {
-        width: 16px;
-        height: 16px;
-        border: 2px solid #409eff;
-        background-color: #fff;
-        border-radius: 50%;
-        transition: 0.2s;
-        user-select: none;
-      }
-    }
+  }
+  .gqg_slider_button {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #409eff;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: 0.2s;
+    user-select: none;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(0,-50%);
   }
 }
 </style>

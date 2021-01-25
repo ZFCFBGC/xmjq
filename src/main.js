@@ -16,9 +16,11 @@ import "@/assets/css/reset.less";
 import gqgButton from "@/components/button/index.js";
 import gqgSwitch from "@/components/switch/index.js";
 import gqgSlider from "@/components/slider/index.js";
+import gqgBadge from "@/components/badge/index.js";
 Vue.use(gqgButton);
 Vue.use(gqgSwitch);
 Vue.use(gqgSlider);
+Vue.use(gqgBadge)
 new Vue({
   router,
   render: (h) => h(App),

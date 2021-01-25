@@ -9,8 +9,13 @@
     <div>
       <gqg-switch v-model="swicthVal" @change="getSwitchVal"></gqg-switch>
     </div>
-    <div style="width:500px;margin-left:100px;">
+    <div style="width:500px;margin-left:100px;margin-top:20px;">
       <gqg-slider></gqg-slider>
+    </div>
+    <div style="margin-top:100px;">
+      <gqg-badge :value="10" type="success" :max="9">
+        <gqg-button type="warning">警告按钮1</gqg-button>
+      </gqg-badge>
     </div>
   </div>
 </template>
@@ -31,9 +36,10 @@ export default {
     clickBtn(info) {
       console.log("---------", info);
     },
-    val(){
-      console.log('222222')
-    }
+    val() {
+      console.log("222222");
+    },
+    sliderVal(min, max, total) {},
   },
 };
 </script>
