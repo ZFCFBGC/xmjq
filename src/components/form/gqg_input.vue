@@ -53,7 +53,7 @@ export default {
     validateEvent: {
       type: Boolean,
       default: true,
-    },
+    }
   },
   mixins: [emitter],
   //model中prop接受v-model传递的值

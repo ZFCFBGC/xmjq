@@ -17,10 +17,12 @@ import gqgButton from "@/components/button/index.js";
 import gqgSwitch from "@/components/switch/index.js";
 import gqgSlider from "@/components/slider/index.js";
 import gqgBadge from "@/components/badge/index.js";
+import gqgInputNumber from "@/components/inputNumber/index.js";
 Vue.use(gqgButton);
 Vue.use(gqgSwitch);
 Vue.use(gqgSlider);
-Vue.use(gqgBadge)
+Vue.use(gqgBadge);
+Vue.use(gqgInputNumber);
 new Vue({
   router,
   render: (h) => h(App),
