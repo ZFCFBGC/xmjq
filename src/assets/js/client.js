@@ -158,25 +158,30 @@ export default {
   //上传接口
   upload(params = {}) {
     let baseUrl;
+    console.log("params:", params);
     if (process.env.NODE_ENV === "development") {
       baseUrl = "http://39.107.103.34:81/web_demo/"; //测试环境
     } else {
       baseUrl = "http://39.107.103.34:81/web_demo/"; //生产环境
     }
-    let formData = new FormData();
-    formData.set("file", params.file.file);
-    formData.set("token", Cookies.get("token") && Cookies.get("token"));
-    let headers = {
-      "Content-Type": "multipart/form-data",
-    };
+    let headers = params.headers
+      ? headers
+      : {
+          "Content-Type": "multipart/form-data",
+        };
     return new Promise((reject, resolve) => {
-      axios.post("api/card/loadFile.do", formData, headers).then((res) => {
-        if (res.code === "200") {
+      axios({
+        url: params.url,
+        method: params.method,
+        data: params.data,
+        headers: headers,
+      })
+        .then((res) => {
           resolve(res.data);
-        } else {
-          reject(res.data);
-        }
-      });
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
   },
 };

@@ -1,35 +1,13 @@
 <template>
   <div class="home">
-    <gqg-button disabled>默认按钮</gqg-button>
-    <gqg-button type="warning">警告按钮</gqg-button>
-    <gqg-button type="error">错误按钮</gqg-button>
-    <gqg-button type="success">成功按钮</gqg-button>
-    <gqg-button type="primary" @click="clickBtn(111111)">主要按钮</gqg-button>
-    <gqg-button type="primary" round>圆角按钮</gqg-button>
-    <div>
-      <gqg-switch v-model="swicthVal" @change="getSwitchVal"></gqg-switch>
-    </div>
-    <div style="width:500px;margin-left:100px;">
-      <gqg-slider
-        :min="0"
-        :max="200"
-        v-model="per"
-        @change="getSliderVal"
-        showInput
-      ></gqg-slider>
-    </div>
-    <div style="margin-top:100px;">
-      <gqg-badge :value="10" type="success" :max="9">
-        <gqg-button type="warning">警告按钮1</gqg-button>
-      </gqg-badge>
-    </div>
-    <div style="margin-top:100px;margin-left:100px;">
-      <gqg-input-number
-        v-model="num"
-        :max="10"
-        :min="0"
-        @change="getNumVal"
-      ></gqg-input-number>
+    <div style="margin:100px;">
+      <gqg-upload :httpRequest="myUpload" ref="upload" action="">
+        <gqg-button type="primary">上传文件</gqg-button>
+        <div slot="tip" class="gqg_upload_tip">
+          只能上传jpg/png文件，且不超过500kb
+        </div>
+      </gqg-upload>
+      <gqg-button @click="confirmSubmit">确认上传</gqg-button>
     </div>
   </div>
 </template>
@@ -44,21 +22,23 @@ export default {
   },
   created() {},
   methods: {
-    getSwitchVal(val) {
-      console.log("22222", val);
-      console.log("33333", this.swicthVal);
+    myUpload(file) {
+      var that = this;
+      console.log("file", file);
+      let formData = new FormData();
+      formData.append("file", file);
+      that.$client
+        .upload({
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          method: "post",
+          url: "",
+          data: formData,
+        })
+        .then((res) => {})
+        .catch((error) => {});
     },
-    clickBtn(info) {
-      console.log("---------", info);
-    },
-    val() {
-      console.log("222222");
-    },
-    getSliderVal(val) {
-      console.log("22222", val);
-    },
-    getNumVal(val) {
-      console.log("部署框：", val, this.num);
+    confirmSubmit() {
+      this.$refs.upload.submit();
     },
   },
 };

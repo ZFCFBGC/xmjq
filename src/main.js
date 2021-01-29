@@ -18,11 +18,13 @@ import gqgSwitch from "@/components/switch/index.js";
 import gqgSlider from "@/components/slider/index.js";
 import gqgBadge from "@/components/badge/index.js";
 import gqgInputNumber from "@/components/inputNumber/index.js";
+import gqgUpload from "@/components/upload/index.js";
 Vue.use(gqgButton);
 Vue.use(gqgSwitch);
 Vue.use(gqgSlider);
 Vue.use(gqgBadge);
 Vue.use(gqgInputNumber);
+Vue.use(gqgUpload);
 new Vue({
   router,
   render: (h) => h(App),
