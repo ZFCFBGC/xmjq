@@ -3,11 +3,7 @@
     <div style="margin:100px;">
       <gqg-upload :httpRequest="myUpload" ref="upload" action="">
         <gqg-button type="primary">上传文件</gqg-button>
-        <div slot="tip" class="gqg_upload_tip">
-          只能上传jpg/png文件，且不超过500kb
-        </div>
       </gqg-upload>
-      <gqg-button @click="confirmSubmit">确认上传</gqg-button>
     </div>
   </div>
 </template>

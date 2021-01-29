@@ -45,7 +45,7 @@ export default {
     httpRequest: {
       type: Function,
       defalut: ajax,
-    }
+    },
   },
   data() {
     return {
@@ -124,6 +124,7 @@ export default {
       line-height: inherit;
       font-size: 14px;
       color: #666;
+      cursor: pointer;
     }
   }
   .fileList:first-child {
