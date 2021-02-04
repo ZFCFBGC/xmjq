@@ -13,6 +13,9 @@ import Tools from "@/assets/js/tools.js";
 import "@/assets/css/reset.css";
 import "@/assets/css/reset.less";
 
+//iconfont矢量库
+import "@/assets/iconfont/iconfont.css";
+
 import gqgButton from "@/components/button/index.js";
 import gqgSwitch from "@/components/switch/index.js";
 import gqgSlider from "@/components/slider/index.js";
