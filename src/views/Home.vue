@@ -1,9 +1,13 @@
 <template>
   <div class="home">
-    <div style="margin:100px;">
+    <div>
       <gqg-upload :httpRequest="myUpload" ref="upload" action="">
         <gqg-button type="primary">上传文件</gqg-button>
       </gqg-upload>
+    </div>
+    <div class="box" ref="box"></div>
+    <div>
+      <gqg-button type="primary" @click="clickBtn">message</gqg-button>
     </div>
   </div>
 </template>
@@ -17,6 +21,15 @@ export default {
     };
   },
   created() {},
+  mounted() {
+    var that = this;
+    // this.$gqgLoading.show({
+    //   text: "测试",
+    // });
+    // setTimeout(function() {
+    //   that.$gqgLoading.hide();
+    // }, 3000);
+  },
   methods: {
     myUpload(file) {
       var that = this;
@@ -35,6 +48,13 @@ export default {
     },
     confirmSubmit() {
       this.$refs.upload.submit();
+    },
+    clickBtn() {
+      this.$gqgMessage.show({
+        message: "消息提示",
+        showClose:true,
+        type:'success'
+      });
     },
   },
 };

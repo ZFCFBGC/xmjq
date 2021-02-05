@@ -124,8 +124,8 @@ a {
   -webkit-backface-visibility: hidden;
 }
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track-piece {
   background-color: rgba(0, 0, 0, 0.2);
@@ -160,7 +160,6 @@ body {
   position: relative;
 }
 html {
-  overflow-y: scroll;
   position: relative;
 }
 .clearfix:after {

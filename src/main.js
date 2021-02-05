@@ -22,12 +22,16 @@ import gqgSlider from "@/components/slider/index.js";
 import gqgBadge from "@/components/badge/index.js";
 import gqgInputNumber from "@/components/inputNumber/index.js";
 import gqgUpload from "@/components/upload/index.js";
+import gqgLoading from "@/components/loading/index.js";
+import gqgMessage from "@/components/message/index.js"
 Vue.use(gqgButton);
 Vue.use(gqgSwitch);
 Vue.use(gqgSlider);
 Vue.use(gqgBadge);
 Vue.use(gqgInputNumber);
 Vue.use(gqgUpload);
+Vue.use(gqgLoading);
+Vue.use(gqgMessage);
 new Vue({
   router,
   render: (h) => h(App),
