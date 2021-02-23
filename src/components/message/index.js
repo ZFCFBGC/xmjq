@@ -26,7 +26,7 @@ const message = {
       instance.showClose = options.showClose || false;
       instance.plain = options.plain || false;
       instance.center = options.center || false;
-      var duration = options.duration || 30000;
+      var duration = options.duration || 3000;
       timer = setTimeout(function() {
         instance.show = false;
       }, duration);

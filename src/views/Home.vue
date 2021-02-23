@@ -1,13 +1,9 @@
 <template>
   <div class="home">
-    <div>
-      <gqg-upload :httpRequest="myUpload" ref="upload" action="">
-        <gqg-button type="primary">上传文件</gqg-button>
-      </gqg-upload>
-    </div>
-    <div class="box" ref="box"></div>
-    <div>
-      <gqg-button type="primary" @click="clickBtn">message</gqg-button>
+    <div style="margin-top:100px;">
+      <gqg-pop-confirm title="这是一段内容确定删除吗？" :btnShow="false" @confirm="confirm" @cancel="cancel">
+        <gqg-button slot="reference">删除</gqg-button>
+      </gqg-pop-confirm>
     </div>
   </div>
 </template>
@@ -23,12 +19,6 @@ export default {
   created() {},
   mounted() {
     var that = this;
-    // this.$gqgLoading.show({
-    //   text: "测试",
-    // });
-    // setTimeout(function() {
-    //   that.$gqgLoading.hide();
-    // }, 3000);
   },
   methods: {
     myUpload(file) {
@@ -52,10 +42,16 @@ export default {
     clickBtn() {
       this.$gqgMessage.show({
         message: "消息提示",
-        showClose:true,
-        type:'success'
+        showClose: false,
+        type: "success",
       });
     },
+    confirm(info){
+      console.log('确认：',info)
+    },
+    cancel(info){
+      console.log('取消：',info)
+    }
   },
 };
 </script>

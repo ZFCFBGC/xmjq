@@ -75,6 +75,7 @@ export default {
     .gqg_message_content {
       display: inline-block;
       padding-left: 16px;
+      color: #666;
     }
     .gqg_message_closeBtn {
       float: right;

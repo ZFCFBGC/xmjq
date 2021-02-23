@@ -370,30 +370,42 @@ tools.uniArr = (arr) => {
     count: newCount,
   };
 };
-tools.debounce=function(func, wait) {
+tools.debounce = function(func, wait) {
   let timeout;
-  return function () {
-      const context = this;
-      const args = [...arguments];
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {
-          func.apply(context, args)
-      }, wait)
-  }
-},
+  return function() {
+    const context = this;
+    const args = [...arguments];
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(context, args);
+    }, wait);
+  };
+};
 //节流
-tools.throttle=function(func, wait) {
+tools.throttle = function(func, wait) {
   let timeout;
-  return function () {
-      let context = this;
-      let args = arguments;
-      if (!timeout) {
-          timeout = setTimeout(() => {
-              timeout = null;
-              func.apply(context, args)
-          }, wait)
-      }
-
-  }
-}
+  return function() {
+    let context = this;
+    let args = arguments;
+    if (!timeout) {
+      timeout = setTimeout(() => {
+        timeout = null;
+        func.apply(context, args);
+      }, wait);
+    }
+  };
+};
+//获取元素边界值
+tools.getRect = function(elements) {
+  var rect = elements.getBoundingClientRect();
+  var clientTop = document.documentElement.clientTop;
+  var clientLeft = document.documentElement.clientLeft;
+  return {
+    // 兼容ie多出的两个px
+    top: rect.top - clientTop, // 距离顶部的位置
+    bottom: rect.bottom - clientTop, // 距离顶部加上元素本身的高度就等于bottom的位置
+    left: rect.left - clientLeft, // 距离左边的位置
+    right: rect.right - clientLeft, // 距离右边的位置就是 距离左边的位置加上元素本身的宽度
+  };
+};
 export default tools;

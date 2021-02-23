@@ -23,7 +23,9 @@ import gqgBadge from "@/components/badge/index.js";
 import gqgInputNumber from "@/components/inputNumber/index.js";
 import gqgUpload from "@/components/upload/index.js";
 import gqgLoading from "@/components/loading/index.js";
-import gqgMessage from "@/components/message/index.js"
+import gqgMessage from "@/components/message/index.js";
+import gqgMessageBox from "@/components/messageBox/index.js";
+import gqgPopConfirm from "@/components/popConfirm/index.js";
 Vue.use(gqgButton);
 Vue.use(gqgSwitch);
 Vue.use(gqgSlider);
@@ -32,6 +34,8 @@ Vue.use(gqgInputNumber);
 Vue.use(gqgUpload);
 Vue.use(gqgLoading);
 Vue.use(gqgMessage);
+Vue.use(gqgMessageBox);
+Vue.use(gqgPopConfirm);
 new Vue({
   router,
   render: (h) => h(App),
