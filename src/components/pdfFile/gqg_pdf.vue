@@ -16,7 +16,7 @@
 </template>
 <script>
 export default {
-  name: "gqgPdf",
+  name: "gqgPdfFile",
   props: {
     filePath: {
       type: String,
