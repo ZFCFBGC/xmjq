@@ -26,6 +26,9 @@ import gqgLoading from "@/components/loading/index.js";
 import gqgMessage from "@/components/message/index.js";
 import gqgMessageBox from "@/components/messageBox/index.js";
 import gqgPopConfirm from "@/components/popConfirm/index.js";
+import gqgCarousel from "@/components/carousel/index.js";
+import gqgCarouselItem from "@/components/carousel-item/index.js";
+
 Vue.use(gqgButton);
 Vue.use(gqgSwitch);
 Vue.use(gqgSlider);
@@ -36,6 +39,9 @@ Vue.use(gqgLoading);
 Vue.use(gqgMessage);
 Vue.use(gqgMessageBox);
 Vue.use(gqgPopConfirm);
+Vue.use(gqgCarousel);
+Vue.use(gqgCarouselItem);
+
 new Vue({
   router,
   render: (h) => h(App),

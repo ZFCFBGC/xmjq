@@ -408,4 +408,19 @@ tools.getRect = function(elements) {
     right: rect.right - clientLeft, // 距离右边的位置就是 距离左边的位置加上元素本身的宽度
   };
 };
+//样式兼容处理
+tools.autoprefixer = function(style) {
+  if (typeof style !== "object") return style;
+  const rules = ["transform", "transition", "animation"];
+  const prefixes = ["ms-", "webkit-"];
+  rules.forEach((rule) => {
+    const value = style[rule];
+    if (rule && value) {
+      prefixes.forEach((prefix) => {
+        style[prefix + rule] = value;
+      });
+    }
+  });
+  return style;
+};
 export default tools;

@@ -1,9 +1,21 @@
 <template>
   <div class="home">
     <div style="margin-top:100px;">
-      <gqg-pop-confirm title="这是一段内容确定删除吗？" :btnShow="false" @confirm="confirm" @cancel="cancel">
+      <gqg-pop-confirm
+        title="这是一段内容确定删除吗？"
+        @confirm="confirm"
+        @cancel="cancel"
+      >
         <gqg-button slot="reference">删除</gqg-button>
       </gqg-pop-confirm>
+    </div>
+    <div class="lunbotu" style="width:480px;">
+      <gqg-carousel>
+        <gqg-carousel-item> </gqg-carousel-item>
+        <gqg-carousel-item> </gqg-carousel-item>
+        <gqg-carousel-item> </gqg-carousel-item>
+        <gqg-carousel-item> </gqg-carousel-item>
+      </gqg-carousel>
     </div>
   </div>
 </template>
@@ -14,6 +26,7 @@ export default {
       swicthVal: true,
       per: 50,
       num: 1,
+      arr: [1, 2, 3, 4],
     };
   },
   created() {},
@@ -46,12 +59,17 @@ export default {
         type: "success",
       });
     },
-    confirm(info){
-      console.log('确认：',info)
+    confirm(info) {
+      console.log("确认：", info);
     },
-    cancel(info){
-      console.log('取消：',info)
-    }
+    cancel(info) {
+      console.log("取消：", info);
+    },
   },
 };
 </script>
+<style lang="less" scoped>
+.lunbotu {
+  margin: 100px auto;
+}
+</style>
